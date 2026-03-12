@@ -304,35 +304,26 @@ body {
   }
 }
 
-/* ——— Memorama grid ——— */
+/* ——— Memorama grid: 3 columnas, tarjetas más grandes ——— */
 .memorama-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: repeat(2, 1fr);
-  gap: 10px;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: 12px;
   width: 100%;
-  max-width: 400px;
+  max-width: min(420px, 92vw);
   margin: 0 auto;
   perspective: 800px;
-  padding: 6px;
+  padding: 8px;
   border-radius: 16px;
   background: rgba(0, 0, 0, 0.2);
   box-shadow: 0 0 40px rgba(59, 130, 246, 0.15), inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+  min-height: 42vh;
 }
 
-/* En móvil: 3 columnas para cartas más grandes (3 por fila, 4 filas para 10 cartas) */
-@media (max-width: 576px) {
-  .memorama-grid {
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(4, 1fr);
-    max-width: 100%;
-    width: 100%;
-    padding: 4px;
-    gap: 8px;
-    min-height: 38vh;
-    height: 100%;
-    max-height: 56vh;
-  }
+/* Última tarjeta (sola en su fila) centrada */
+.memorama-grid .memorama-card:last-child:nth-child(3n+1) {
+  grid-column: 2;
 }
 
 .memorama-card {
@@ -386,7 +377,18 @@ body {
 .memorama-card .card-front {
   border: 2px solid rgba(255, 255, 255, 0.3);
   transform: rotateY(180deg);
-  padding: 4px;
+  padding: 6px;
+  overflow: hidden;
+  flex-direction: column;
+  gap: 4px;
+}
+.memorama-card .card-front .card-img-wrap {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
   overflow: hidden;
 }
 .memorama-card .card-img {
@@ -394,6 +396,20 @@ body {
   height: 100%;
   object-fit: cover;
   display: block;
+}
+.memorama-card .card-name {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.8), 0 1px 2px rgba(0, 0, 0, 0.9);
+  line-height: 1.2;
+  padding: 2px 4px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Bordes neón por personaje (8 cartas) */
@@ -588,20 +604,11 @@ body {
 /* Responsivo y touch */
 @media (max-width: 380px) {
   .memorama-grid {
-    gap: 6px;
-    padding: 3px;
+    gap: 8px;
+    padding: 6px;
   }
-  .memorama-card .card-front {
-    font-size: 1.15rem;
-  }
-  .memorama-card .card-back {
-    font-size: 1rem;
-  }
-}
-
-@media (min-width: 400px) {
-  .memorama-grid {
-    gap: 10px;
+  .memorama-card .card-name {
+    font-size: 0.65rem;
   }
 }
 
