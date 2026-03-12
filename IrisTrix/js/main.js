@@ -1,6 +1,10 @@
 /* IrisTrix — Memorama (juego de parejas) */
 
 const CARD_IMAGES = ["jesus", "moises", "isaias", "david", "jeremias", "salomon", "eliseo", "jonas"];
+const CARD_NAMES = {
+  jesus: "Jesús", moises: "Moisés", isaias: "Isaías", david: "David",
+  jeremias: "Jeremías", salomon: "Salomón", eliseo: "Eliseo", jonas: "Jonás"
+};
 const CARDS_PATH = "assets/cards";
 const PAIRS_PER_GAME = 5;
 const PREVIEW_SECONDS = 10; 
@@ -61,11 +65,15 @@ function renderCards() {
     div.type = "button";
     div.className = `memorama-card memorama-card--${card.imageName}`;
     div.dataset.index = index;
-    div.setAttribute("aria-label", "Carta " + (index + 1));
+    const name = CARD_NAMES[card.imageName] || card.imageName;
+    div.setAttribute("aria-label", "Carta " + (index + 1) + ", " + name);
     const imgSrc = `${CARDS_PATH}/${card.imageName}.png`;
     div.innerHTML = `
       <span class="card-back"><span class="card-back-cross" aria-hidden="true">✝</span></span>
-      <span class="card-front"><img src="${imgSrc}" alt="" class="card-img"></span>
+      <span class="card-front">
+        <span class="card-img-wrap"><img src="${imgSrc}" alt="${name}" class="card-img"></span>
+        <span class="card-name">${name}</span>
+      </span>
     `;
     if (matched.has(card.id)) {
       div.classList.add("matched");
