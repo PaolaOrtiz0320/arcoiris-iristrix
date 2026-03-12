@@ -1,0 +1,583 @@
+/* IrisTrix — Memorama. Paleta logo iglesia + responsivo iOS/Android */
+:root {
+  --bg: #0f172a;
+  --bg-blue: #1e3a5f;
+  --brand-blue: #2563eb;
+  --brand-blue-light: #3b82f6;
+  --brand-blue-dark: #1e40af;
+  --card: rgba(255, 255, 255, 0.08);
+  --border: rgba(255, 255, 255, 0.15);
+  --text: #ffffff;
+  --muted: #94a3b8;
+  --rose: #f87171;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  font-family: "Inter", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+/* Fondo animado (GIF): pon tu archivo en assets/fondo.gif */
+.bg-animated {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+  pointer-events: none;
+}
+.bg-animated-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Capa sobre el GIF para que el contenido se lea bien (semitransparente) */
+.bg-effects {
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at top, rgba(37, 99, 235, 0.25), transparent 50%),
+    radial-gradient(ellipse at bottom right, rgba(30, 64, 175, 0.2), transparent 45%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.75) 0%, rgba(30, 58, 95, 0.65) 100%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ——— Navbar estilo videojuego ——— */
+.navbar-app {
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.7) 0%, rgba(15, 23, 42, 0.9) 100%);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 2px solid #22d3ee;
+  box-shadow:
+    0 2px 0 0 rgba(168, 85, 247, 0.5),
+    0 0 30px rgba(34, 211, 238, 0.4),
+    0 4px 20px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  padding: 12px 0;
+}
+
+.navbar-logo {
+  height: 38px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.6));
+}
+
+.navbar-title {
+  font-family: "Orbitron", sans-serif;
+  font-weight: 800;
+  font-size: 1.5rem;
+  letter-spacing: 0.15em;
+  color: #fff;
+  text-shadow:
+    0 0 10px rgba(34, 211, 238, 0.9),
+    0 0 20px rgba(34, 211, 238, 0.6),
+    0 0 40px rgba(59, 130, 246, 0.4),
+    0 2px 0 rgba(0, 0, 0, 0.3);
+}
+
+.app {
+  position: relative;
+  z-index: 1;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.glass {
+  background: var(--card);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.stat-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+.stat-suffix {
+  font-size: 0.9em;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+/* Modal tipo alerta: PLAY + instrucciones ANTES de iniciar (por fuera del juego) */
+.play-modal {
+  z-index: 20;
+  background: rgba(0, 0, 0, 0.88);
+  padding: 20px;
+}
+.play-modal.hidden {
+  display: none !important;
+}
+.play-modal-card {
+  max-width: 360px;
+  width: 100%;
+  text-align: center;
+  padding: 28px 24px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%);
+  border: 2px solid #22d3ee;
+  border-radius: 16px;
+  box-shadow:
+    0 0 30px rgba(34, 211, 238, 0.6),
+    0 0 60px rgba(34, 211, 238, 0.25),
+    inset 0 0 40px rgba(34, 211, 238, 0.06);
+  animation: playModalEntrada 0.4s ease-out forwards;
+}
+.play-modal-title {
+  display: block;
+  font-family: "Orbitron", sans-serif;
+  font-weight: 800;
+  font-size: 2.2rem;
+  letter-spacing: 0.2em;
+  color: #fff;
+  text-shadow:
+    0 0 14px rgba(34, 211, 238, 1),
+    0 0 35px rgba(34, 211, 238, 0.8),
+    0 0 55px rgba(59, 130, 246, 0.5);
+  margin-bottom: 14px;
+}
+.play-modal-text {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+  line-height: 1.6;
+  margin-bottom: 22px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.play-modal-line {
+  display: block;
+  opacity: 0;
+  transform: translateY(8px);
+  animation: playModalLineIn 0.5s ease-out forwards;
+}
+.play-modal-line:nth-child(1) { animation-delay: 0.15s; }
+.play-modal-line:nth-child(2) { animation-delay: 0.4s; }
+.play-modal-line:nth-child(3) { animation-delay: 0.65s; }
+.play-modal-line:nth-child(4) { animation-delay: 0.9s; }
+.play-modal-text strong {
+  color: #22d3ee;
+  text-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
+}
+@keyframes playModalLineIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.play-modal .btn-primary {
+  box-shadow: 0 0 20px rgba(37, 99, 235, 0.5);
+}
+@keyframes playModalEntrada {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Cintillo (ya no se usa; se reemplazó por play modal) */
+.cintillo {
+  width: 100%;
+  padding: 18px 20px;
+  margin-bottom: 14px;
+  text-align: center;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.92) 0%, rgba(15, 23, 42, 0.95) 100%);
+  border: 2px solid #22d3ee;
+  border-radius: 14px;
+  box-shadow:
+    0 0 25px rgba(34, 211, 238, 0.6),
+    0 0 50px rgba(34, 211, 238, 0.25),
+    inset 0 0 40px rgba(34, 211, 238, 0.06);
+  animation: cintilloEntrada 0.6s ease-out forwards, cintilloBrillo 2s ease-in-out 0.6s infinite;
+}
+.cintillo.hidden {
+  display: none !important;
+}
+.cintillo-play {
+  display: block;
+  font-family: "Orbitron", sans-serif;
+  font-weight: 800;
+  font-size: 2rem;
+  letter-spacing: 0.25em;
+  color: #fff;
+  text-shadow:
+    0 0 12px rgba(34, 211, 238, 1),
+    0 0 30px rgba(34, 211, 238, 0.9),
+    0 0 50px rgba(59, 130, 246, 0.6);
+  margin-bottom: 10px;
+  animation: cintilloPlay 0.7s ease-out 0.2s both;
+}
+.cintillo-text {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.98);
+  text-shadow: 0 0 12px rgba(255, 255, 255, 0.4);
+  display: block;
+  line-height: 1.4;
+  animation: cintilloTexto 0.6s ease-out 0.4s both;
+}
+@keyframes cintilloEntrada {
+  from {
+    opacity: 0;
+    transform: translateY(-24px) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes cintilloBrillo {
+  0%, 100% { box-shadow: 0 0 25px rgba(34, 211, 238, 0.6), 0 0 50px rgba(34, 211, 238, 0.25), inset 0 0 40px rgba(34, 211, 238, 0.06); }
+  50% { box-shadow: 0 0 35px rgba(34, 211, 238, 0.8), 0 0 60px rgba(34, 211, 238, 0.35), inset 0 0 50px rgba(34, 211, 238, 0.1); }
+}
+@keyframes cintilloPlay {
+  from {
+    opacity: 0;
+    transform: scale(0.75);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes cintilloTexto {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.game-status {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #e0e7ff;
+  min-height: 1.5em;
+}
+
+.game-area {
+  position: relative;
+}
+
+/* ——— Memorama grid ——— */
+.memorama-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 10px;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  perspective: 800px;
+  padding: 6px;
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 40px rgba(59, 130, 246, 0.15), inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.memorama-card {
+  aspect-ratio: 1;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--card);
+  color: var(--text);
+  cursor: pointer;
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transform-style: preserve-3d;
+}
+
+.memorama-card:active {
+  transform: scale(0.97);
+}
+
+.memorama-card .card-back,
+.memorama-card .card-front {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transition: transform 0.35s ease;
+  border-radius: 11px;
+}
+
+.memorama-card .card-back {
+  background: linear-gradient(135deg, var(--brand-blue), var(--brand-blue-dark));
+  color: rgba(255, 255, 255, 0.95);
+}
+.card-back-cross {
+  display: block;
+  font-size: 2rem;
+  font-weight: 400;
+  line-height: 1;
+  text-align: center;
+}
+
+.memorama-card .card-front {
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  transform: rotateY(180deg);
+  padding: 4px;
+  overflow: hidden;
+}
+.memorama-card .card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Bordes neón por personaje (8 cartas) */
+.memorama-card--jesus .card-front {
+  border-color: #22d3ee;
+  box-shadow: 0 0 16px rgba(34, 211, 238, 0.6), inset 0 0 20px rgba(34, 211, 238, 0.12);
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.15), transparent 60%);
+}
+.memorama-card--moises .card-front {
+  border-color: #f97316;
+  box-shadow: 0 0 16px rgba(249, 115, 22, 0.6), inset 0 0 20px rgba(249, 115, 22, 0.12);
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.15), transparent 60%);
+}
+.memorama-card--isaias .card-front {
+  border-color: #eab308;
+  box-shadow: 0 0 16px rgba(234, 179, 8, 0.6), inset 0 0 20px rgba(234, 179, 8, 0.12);
+  background: linear-gradient(135deg, rgba(234, 179, 8, 0.15), transparent 60%);
+}
+.memorama-card--david .card-front {
+  border-color: #a855f7;
+  box-shadow: 0 0 16px rgba(168, 85, 247, 0.6), inset 0 0 20px rgba(168, 85, 247, 0.12);
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), transparent 60%);
+}
+.memorama-card--jeremias .card-front {
+  border-color: #ec4899;
+  box-shadow: 0 0 16px rgba(236, 72, 153, 0.6), inset 0 0 20px rgba(236, 72, 153, 0.12);
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.15), transparent 60%);
+}
+.memorama-card--salomon .card-front {
+  border-color: #22c55e;
+  box-shadow: 0 0 16px rgba(34, 197, 94, 0.6), inset 0 0 20px rgba(34, 197, 94, 0.12);
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.15), transparent 60%);
+}
+.memorama-card--eliseo .card-front {
+  border-color: #14b8a6;
+  box-shadow: 0 0 16px rgba(20, 184, 166, 0.6), inset 0 0 20px rgba(20, 184, 166, 0.12);
+  background: linear-gradient(135deg, rgba(20, 184, 166, 0.15), transparent 60%);
+}
+.memorama-card--jonas .card-front {
+  border-color: #3b82f6;
+  box-shadow: 0 0 16px rgba(59, 130, 246, 0.6), inset 0 0 20px rgba(59, 130, 246, 0.12);
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), transparent 60%);
+}
+
+.memorama-card.flipped .card-back {
+  transform: rotateY(180deg);
+}
+
+.memorama-card.flipped .card-front {
+  transform: rotateY(0deg);
+}
+
+.memorama-card.matched {
+  pointer-events: none;
+  opacity: 0.85;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.memorama-card.matched .card-front {
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.5), inset 0 0 24px rgba(34, 197, 94, 0.2);
+  border-color: #22c55e;
+}
+
+/* Botones */
+.btn-primary {
+  background: linear-gradient(135deg, var(--brand-blue), var(--brand-blue-light));
+  border: none;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, var(--brand-blue-dark), var(--brand-blue));
+  color: white;
+}
+
+.mini-card {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border);
+}
+
+/* Footer */
+.footer {
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(180deg, transparent 0%, rgba(30, 58, 95, 0.5) 50%, var(--brand-blue-dark) 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.footer-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.footer-logo {
+  height: 28px;
+  width: auto;
+  object-fit: contain;
+  border-radius: 8px;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.2));
+}
+.footer-text {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(15, 23, 42, 0.9);
+  backdrop-filter: blur(8px);
+  padding: 1rem;
+  padding-top: max(1rem, env(safe-area-inset-top));
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  z-index: 10;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.modal-card {
+  max-width: 360px;
+  width: 100%;
+}
+
+/* Modal victoria: animación de felicitación */
+.modal-card--win {
+  animation: winCelebrate 0.7s ease-out forwards;
+}
+.win-celebrate-emoji {
+  font-size: 3rem;
+  margin: 0 0 4px 0;
+  animation: winEmojiPop 0.5s ease-out 0.2s both;
+}
+.modal-card--win .win-title {
+  animation: winTextIn 0.5s ease-out 0.3s both;
+  opacity: 0;
+}
+@keyframes winCelebrate {
+  0% { transform: scale(0.85); opacity: 0; }
+  50% { transform: scale(1.05); }
+  70% { transform: scale(0.98); }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes winEmojiPop {
+  0% { transform: scale(0); opacity: 0; }
+  60% { transform: scale(1.2); }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes winTextIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Modal tiempo agotado: animación de ánimo */
+.modal-card--timeup {
+  animation: timeupShake 0.8s ease-out forwards;
+}
+.timeup-emoji {
+  font-size: 2.5rem;
+  margin: 0 0 4px 0;
+  animation: timeupEmoji 0.6s ease-out 0.15s both;
+}
+.modal-card--timeup .timeup-title {
+  animation: timeupTextIn 0.5s ease-out 0.35s both;
+  opacity: 0;
+}
+@keyframes timeupShake {
+  0% { transform: scale(0.9); opacity: 0; }
+  20% { transform: scale(1.02) translateX(-4px); }
+  40% { transform: scale(1.02) translateX(4px); }
+  60% { transform: scale(1.02) translateX(-3px); }
+  80% { transform: scale(1.02) translateX(2px); }
+  100% { transform: scale(1) translateX(0); opacity: 1; }
+}
+@keyframes timeupEmoji {
+  0% { transform: scale(0.5); opacity: 0; }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes timeupTextIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsivo y touch */
+@media (max-width: 380px) {
+  .memorama-grid {
+    gap: 6px;
+    max-width: 300px;
+  }
+  .memorama-card .card-front {
+    font-size: 1.15rem;
+  }
+  .memorama-card .card-back {
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 400px) {
+  .memorama-grid {
+    gap: 10px;
+  }
+}
+
+/* Evitar zoom en inputs en iOS */
+@media screen and (max-width: 420px) {
+  body {
+    font-size: 16px;
+  }
+}

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0f172a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>IrisTrix — Memorama</title>
+  <link rel="manifest" href="manifest.json" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Outfit:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="d-flex flex-column min-vh-100">
+  <div class="bg-animated" aria-hidden="true">
+    <img src="assets/fondo.gif" alt="" class="bg-animated-img" onerror="this.parentElement.style.display='none'" />
+  </div>
+  <div class="bg-effects"></div>
+
+  <nav class="navbar-app">
+    <div class="container">
+      <div class="d-flex align-items-center justify-content-center gap-2 py-3">
+        <img src="assets/logo-iglesia.png" alt="Logo" class="navbar-logo" />
+        <span class="navbar-title">IrisTrix</span>
+      </div>
+    </div>
+  </nav>
+
+  <main class="app container flex-grow-1 py-3 pb-4">
+    <section class="stats row g-2 mb-3">
+      <article class="stat glass col rounded-3 p-2 p-sm-3 text-center">
+        <span class="stat-label d-block small">Pares</span>
+        <strong id="pairsCount">0</strong><span class="stat-suffix">/5</span>
+      </article>
+      <article class="stat glass col rounded-3 p-2 p-sm-3 text-center">
+        <span class="stat-label d-block small">Movimientos</span>
+        <strong id="movesCount">0</strong>
+      </article>
+      <article class="stat glass col rounded-3 p-2 p-sm-3 text-center">
+        <span class="stat-label d-block small">Mejor</span>
+        <strong id="bestCount">—</strong>
+      </article>
+    </section>
+
+    <p id="gameStatus" class="game-status text-center mb-2">Memoriza las cartas...</p>
+    <div class="game-area">
+      <div id="memoramaGrid" class="memorama-grid"></div>
+    </div>
+
+    <section class="controls mt-3">
+      <button type="button" id="newGameBtn" class="btn btn-primary w-100 rounded-4 py-3 fw-bold">Nueva partida</button>
+    </section>
+  </main>
+
+  <footer class="footer mt-auto">
+    <div class="container py-2">
+      <div class="footer-inner">
+        <img src="assets/logo-iglesia.png" alt="Logo Iglesia" class="footer-logo" />
+        <p class="footer-text mb-0">© Todos los derechos reservados 2026 · Creado por <strong class="text-white">Paola Ortiz</strong></p>
+      </div>
+    </div>
+  </footer>
+
+  <div id="winModal" class="modal hidden">
+    <div class="modal-card modal-card--win glass rounded-4 p-4 text-center" id="winModalCard">
+      <p class="win-celebrate-emoji" aria-hidden="true">🎉</p>
+      <p class="modal-eyebrow text-uppercase small mb-1">¡Completado!</p>
+      <h2 class="h4 mb-2 win-title">¡Felicidades! Encontraste todas las parejas</h2>
+      <p id="winMessage" class="text-white-50 mb-3">Lo lograste en 0 movimientos.</p>
+      <div class="row g-2 mb-3">
+        <div class="col-6">
+          <div class="mini-card rounded-3 p-3 text-start">
+            <span class="small text-white-50 d-block">Movimientos</span>
+            <strong id="finalMoves" class="fs-5">0</strong>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="mini-card rounded-3 p-3 text-start">
+            <span class="small text-white-50 d-block">Mejor</span>
+            <strong id="finalBest" class="fs-5">—</strong>
+          </div>
+        </div>
+      </div>
+      <button type="button" id="playAgainBtn" class="btn btn-primary w-100 rounded-4 py-3 fw-bold">Jugar de nuevo</button>
+    </div>
+  </div>
+
+  <div id="playModal" class="modal play-modal">
+    <div class="modal-card play-modal-card">
+      <span class="play-modal-title">¡PLAY!</span>
+      <div class="play-modal-text" id="playModalInstructions" aria-live="polite">
+        <span class="play-modal-line">Paso 1: Verás las cartas <strong>10 segundos</strong>.</span>
+        <span class="play-modal-line">Memoriza dónde está cada pareja.</span>
+        <span class="play-modal-line">Paso 2: Se tapan. Tienes <strong>15 segundos</strong> para tocar dos cartas que sean iguales.</span>
+        <span class="play-modal-line">¡Encuentra las <strong>4 parejas</strong>!</span>
+      </div>
+      <button type="button" id="comenzarBtn" class="btn btn-primary rounded-4 py-3 px-4 fw-bold">Comenzar</button>
+    </div>
+  </div>
+
+  <div id="timeUpModal" class="modal hidden">
+    <div class="modal-card modal-card--timeup glass rounded-4 p-4 text-center" id="timeUpModalCard">
+      <p class="timeup-emoji" aria-hidden="true">💪</p>
+      <p class="modal-eyebrow text-uppercase small mb-1">Se acabó el tiempo</p>
+      <h2 class="h4 mb-2 timeup-title">¡Casi! La próxima lo lograrás</h2>
+      <p class="text-white-50 mb-3">No te rindas. Intenta de nuevo y memoriza bien las cartas.</p>
+      <button type="button" id="tryAgainBtn" class="btn btn-primary w-100 rounded-4 py-3 fw-bold">Intentar de nuevo</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
