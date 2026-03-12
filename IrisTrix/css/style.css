@@ -320,16 +320,18 @@ body {
   box-shadow: 0 0 40px rgba(59, 130, 246, 0.15), inset 0 0 0 1px rgba(255, 255, 255, 0.06);
 }
 
-/* En móvil: que las cartas ocupen todo el ancho y más alto del panel */
+/* En móvil: 3 columnas para cartas más grandes (3 por fila, 4 filas para 10 cartas) */
 @media (max-width: 576px) {
   .memorama-grid {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(4, 1fr);
     max-width: 100%;
     width: 100%;
     padding: 4px;
     gap: 8px;
     min-height: 38vh;
     height: 100%;
-    max-height: 50vh;
+    max-height: 56vh;
   }
 }
 
