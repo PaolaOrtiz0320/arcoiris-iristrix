@@ -1,0 +1,12 @@
+{
+  "name": "IrisTrix Memorama",
+  "short_name": "IrisTrix",
+  "description": "Memorama bíblico. Encuentra las parejas.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "lang": "es",
+  "icons": []
+}
